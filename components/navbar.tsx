@@ -27,16 +27,16 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
         <Logo size="md" />
 
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-8" role="navigation" aria-label="Landing page">
           <Link
             href="#features"
-            className="text-sm text-gray-400 hover:text-white transition-colors"
+            className="text-sm text-gray-300 hover:text-white transition-colors"
           >
             Features
           </Link>
           <Link
             href="#how-it-works"
-            className="text-sm text-gray-400 hover:text-white transition-colors"
+            className="text-sm text-gray-300 hover:text-white transition-colors"
           >
             How it works
           </Link>
@@ -45,7 +45,7 @@ export function Navbar() {
         <div className="flex items-center gap-3">
           <Link
             href="/auth/signin"
-            className="text-sm text-gray-300 hover:text-white transition-colors px-4 py-2"
+            className="text-sm text-gray-200 hover:text-white transition-colors px-4 py-2"
           >
             Sign in
           </Link>
@@ -54,7 +54,7 @@ export function Navbar() {
             className="flex items-center gap-2 text-sm font-semibold bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-500 hover:to-violet-500 text-white px-5 py-2.5 rounded-xl transition-all duration-200 shadow-lg shadow-purple-500/25"
           >
             Get started
-            <ArrowRight size={14} />
+            <ArrowRight size={14} aria-hidden="true" />
           </Link>
         </div>
       </div>

@@ -30,26 +30,38 @@ export default function SignInPage() {
       if (hasRealSupabase) {
         const { createClient } = await import("@/lib/supabase/client");
         const supabase = createClient();
-        const { error: authError } = await supabase.auth.signInWithPassword({ email, password });
+        const { error: authError } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
         if (authError) {
           setError(authError.message);
           setLoading(false);
           return;
         }
       } else {
-        // Local mode — verify against accounts created via sign up
-        const stored: Array<{ email: string; password: string; name: string }> =
-          JSON.parse(localStorage.getItem("documind_users") ?? "[]");
+        const stored: Array<{
+          email: string;
+          password: string;
+          name: string;
+        }> = JSON.parse(localStorage.getItem("documind_users") ?? "[]");
 
-        const match = stored.find((u) => u.email === email && u.password === password);
+        const match = stored.find(
+          (u) => u.email === email && u.password === password
+        );
 
         if (!match) {
-          setError("No account found with those credentials. Please sign up first.");
+          setError(
+            "No account found with those credentials. Please sign up first."
+          );
           setLoading(false);
           return;
         }
 
-        localStorage.setItem("documind_session", JSON.stringify({ email: match.email, name: match.name }));
+        localStorage.setItem(
+          "documind_session",
+          JSON.stringify({ email: match.email, name: match.name })
+        );
       }
 
       router.push("/dashboard");
@@ -70,14 +82,23 @@ export default function SignInPage() {
       <div className="bg-[#111320] border border-white/8 rounded-2xl p-8">
         <form onSubmit={handleSignIn} className="space-y-5">
           {error && (
-            <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+            <div
+              className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm"
+              role="alert"
+            >
               {error}
             </div>
           )}
 
           <div className="space-y-1.5">
-            <label className="text-sm font-medium text-gray-300">Email</label>
+            <label
+              htmlFor="signin-email"
+              className="text-sm font-medium text-gray-300"
+            >
+              Email
+            </label>
             <input
+              id="signin-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -90,13 +111,22 @@ export default function SignInPage() {
 
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
-              <label className="text-sm font-medium text-gray-300">Password</label>
-              <Link href="#" className="text-xs text-purple-400 hover:text-purple-300 transition-colors">
+              <label
+                htmlFor="signin-password"
+                className="text-sm font-medium text-gray-300"
+              >
+                Password
+              </label>
+              <Link
+                href="#"
+                className="text-xs text-purple-400 hover:text-purple-300 transition-colors"
+              >
                 Forgot password?
               </Link>
             </div>
             <div className="relative">
               <input
+                id="signin-password"
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -109,6 +139,7 @@ export default function SignInPage() {
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300 transition-colors"
+                aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>
@@ -120,14 +151,19 @@ export default function SignInPage() {
             disabled={loading}
             className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-500 hover:to-violet-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-all duration-200 shadow-lg shadow-purple-500/25"
           >
-            {loading && <Loader2 size={16} className="animate-spin" />}
+            {loading && (
+              <Loader2 size={16} className="animate-spin" aria-hidden="true" />
+            )}
             {loading ? "Signing in..." : "Sign in"}
           </button>
         </form>
 
-        <div className="mt-6 text-center text-sm text-gray-500">
+        <div className="mt-6 text-center text-sm text-gray-400">
           Don&apos;t have an account?{" "}
-          <Link href="/auth/signup" className="text-purple-400 hover:text-purple-300 font-medium transition-colors">
+          <Link
+            href="/auth/signup"
+            className="text-purple-400 hover:text-purple-300 font-medium transition-colors"
+          >
             Sign up free
           </Link>
         </div>

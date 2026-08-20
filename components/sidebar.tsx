@@ -15,6 +15,7 @@ import {
   Calendar,
   ClipboardList,
   Brain,
+  X,
 } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { cn } from "@/lib/utils";
@@ -40,9 +41,10 @@ const bottomNav = [
 interface SidebarProps {
   user?: { name?: string; email?: string };
   chatCount?: number;
+  onClose?: () => void;
 }
 
-export function Sidebar({ user, chatCount = 0 }: SidebarProps) {
+export function Sidebar({ user, chatCount = 0, onClose }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
 
@@ -53,29 +55,54 @@ export function Sidebar({ user, chatCount = 0 }: SidebarProps) {
     router.push("/auth/signin");
   };
 
+  const handleNavClick = () => {
+    // Close mobile sidebar on navigation
+    onClose?.();
+  };
+
   const isActive = (href: string) =>
     pathname === href || pathname.startsWith(href + "/");
 
   return (
-    <aside className="flex flex-col h-full w-64 border-r border-white/5 bg-[#0d0f1a] shrink-0">
-      {/* Logo */}
-      <div className="p-5 border-b border-white/5">
+    <aside
+      className="flex flex-col h-full w-64 border-r border-white/5 bg-[#0d0f1a] shrink-0"
+      role="navigation"
+      aria-label="Main navigation"
+    >
+      {/* Logo + mobile close */}
+      <div className="p-5 border-b border-white/5 flex items-center justify-between">
         <Logo size="sm" />
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/8 transition-colors lg:hidden"
+            aria-label="Close navigation menu"
+          >
+            <X size={18} />
+          </button>
+        )}
       </div>
 
       {/* Workspace selector */}
       <div className="px-3 pt-3">
-        <button className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg bg-white/5 hover:bg-white/8 transition-colors">
+        <div className="w-full flex items-center justify-between px-3 py-2.5 rounded-lg bg-white/5">
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-md bg-gradient-to-br from-purple-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold">
+            <div
+              className="w-7 h-7 rounded-md bg-gradient-to-br from-purple-500 to-violet-600 flex items-center justify-center text-white text-xs font-bold"
+              aria-hidden="true"
+            >
               {user?.name?.charAt(0)?.toUpperCase() ?? "D"}
             </div>
             <span className="text-sm font-medium text-gray-200 truncate max-w-[110px]">
               {user?.name ?? "My workspace"}
             </span>
           </div>
-          <ChevronDown size={14} className="text-gray-400" />
-        </button>
+          <ChevronDown
+            size={14}
+            className="text-gray-400"
+            aria-hidden="true"
+          />
+        </div>
       </div>
 
       {/* Main nav */}
@@ -84,6 +111,8 @@ export function Sidebar({ user, chatCount = 0 }: SidebarProps) {
           <Link
             key={href}
             href={href}
+            onClick={handleNavClick}
+            aria-current={isActive(href) ? "page" : undefined}
             className={cn(
               "flex items-center justify-between px-3 py-2.5 rounded-lg text-sm transition-colors",
               isActive(href)
@@ -92,11 +121,14 @@ export function Sidebar({ user, chatCount = 0 }: SidebarProps) {
             )}
           >
             <div className="flex items-center gap-3">
-              <Icon size={17} />
+              <Icon size={17} aria-hidden="true" />
               <span>{label}</span>
             </div>
             {badge && chatCount > 0 && (
-              <span className="text-xs bg-purple-500/20 text-purple-300 px-1.5 py-0.5 rounded-full font-medium">
+              <span
+                className="text-xs bg-purple-500/20 text-purple-300 px-1.5 py-0.5 rounded-full font-medium"
+                aria-label={`${chatCount} chats`}
+              >
                 {chatCount}
               </span>
             )}
@@ -105,13 +137,15 @@ export function Sidebar({ user, chatCount = 0 }: SidebarProps) {
 
         {/* Tools section */}
         <div className="pt-3 pb-1">
-          <p className="text-[10px] font-semibold text-gray-600 uppercase tracking-widest px-3 mb-1.5">
+          <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-widest px-3 mb-1.5">
             AI Tools
           </p>
           {toolsNav.map(({ href, label, icon: Icon }) => (
             <Link
               key={href}
               href={href}
+              onClick={handleNavClick}
+              aria-current={isActive(href) ? "page" : undefined}
               className={cn(
                 "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors",
                 isActive(href)
@@ -119,7 +153,7 @@ export function Sidebar({ user, chatCount = 0 }: SidebarProps) {
                   : "text-gray-400 hover:text-gray-200 hover:bg-white/5"
               )}
             >
-              <Icon size={17} />
+              <Icon size={17} aria-hidden="true" />
               <span>{label}</span>
             </Link>
           ))}
@@ -129,13 +163,23 @@ export function Sidebar({ user, chatCount = 0 }: SidebarProps) {
       {/* AI Promo card */}
       <div className="mx-3 mb-2 p-3.5 rounded-xl bg-gradient-to-br from-purple-900/40 to-violet-900/30 border border-purple-500/20">
         <div className="flex items-center gap-2 mb-1.5">
-          <Sparkles size={14} className="text-purple-400" />
-          <span className="text-xs font-semibold text-white">Make sense of it all</span>
+          <Sparkles
+            size={14}
+            className="text-purple-400"
+            aria-hidden="true"
+          />
+          <span className="text-xs font-semibold text-white">
+            Make sense of it all
+          </span>
         </div>
         <p className="text-[11px] text-gray-400 mb-2 leading-relaxed">
           Ask your docs anything — powered by ChatGPT or Gemini.
         </p>
-        <Link href="/chat" className="text-xs text-purple-300 hover:text-purple-200 font-medium">
+        <Link
+          href="/chat"
+          onClick={handleNavClick}
+          className="text-xs text-purple-300 hover:text-purple-200 font-medium"
+        >
           Start a chat →
         </Link>
       </div>
@@ -146,6 +190,8 @@ export function Sidebar({ user, chatCount = 0 }: SidebarProps) {
           <Link
             key={href}
             href={href}
+            onClick={handleNavClick}
+            aria-current={isActive(href) ? "page" : undefined}
             className={cn(
               "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm transition-colors",
               isActive(href)
@@ -153,7 +199,7 @@ export function Sidebar({ user, chatCount = 0 }: SidebarProps) {
                 : "text-gray-400 hover:text-gray-200 hover:bg-white/5"
             )}
           >
-            <Icon size={17} />
+            <Icon size={17} aria-hidden="true" />
             <span>{label}</span>
           </Link>
         ))}
@@ -162,7 +208,10 @@ export function Sidebar({ user, chatCount = 0 }: SidebarProps) {
       {/* User + logout */}
       <div className="border-t border-white/5 p-3 space-y-1">
         <div className="flex items-center gap-2.5 px-3 py-2">
-          <div className="w-7 h-7 rounded-full bg-gradient-to-br from-purple-400 to-violet-500 flex items-center justify-center text-white text-xs font-bold">
+          <div
+            className="w-7 h-7 rounded-full bg-gradient-to-br from-purple-400 to-violet-500 flex items-center justify-center text-white text-xs font-bold"
+            aria-hidden="true"
+          >
             {user?.name?.charAt(0)?.toUpperCase() ?? "N"}
           </div>
           <span className="text-sm text-gray-300 truncate flex-1">
@@ -173,7 +222,7 @@ export function Sidebar({ user, chatCount = 0 }: SidebarProps) {
           onClick={handleSignOut}
           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-400 hover:text-gray-200 hover:bg-white/5 transition-colors"
         >
-          <LogOut size={17} />
+          <LogOut size={17} aria-hidden="true" />
           <span>Log out</span>
         </button>
       </div>

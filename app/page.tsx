@@ -127,18 +127,19 @@ export default function HomePage() {
 
             {/* Social proof */}
             <div className="flex items-center gap-3 mt-10">
-              <div className="flex -space-x-2">
+              <div className="flex -space-x-2" role="img" aria-label="User avatars">
                 {["#8B5CF6", "#A78BFA", "#C4B5FD"].map((color, i) => (
                   <div
                     key={i}
                     className="w-8 h-8 rounded-full border-2 border-[#0a0c16]"
                     style={{ background: color }}
+                    aria-hidden="true"
                   />
                 ))}
               </div>
               <div>
-                <div className="text-sm text-gray-300 font-medium">Trusted by thoughtful teams</div>
-                <div className="text-xs text-gray-500">4.9/5 from 2,000+ users</div>
+                <div className="text-sm text-gray-200 font-medium">Trusted by thoughtful teams</div>
+                <div className="text-xs text-gray-400">4.9/5 from 2,000+ users</div>
               </div>
             </div>
           </motion.div>
@@ -232,7 +233,7 @@ export default function HomePage() {
               <span className="text-gradient">think faster</span>
             </h2>
             <p className="text-gray-400 text-lg max-w-xl mx-auto">
-              DocuMind gives your team one place to understand every document you've ever written.
+              DocuMind gives your team one place to understand every document you&apos;ve ever written.
             </p>
           </motion.div>
 
@@ -325,10 +326,10 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="border-t border-white/5 py-8 px-6">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <span className="text-gray-500 text-sm">© 2026 DocuMind. All rights reserved.</span>
-          <div className="flex items-center gap-6 text-sm text-gray-500">
-            <Link href="#" className="hover:text-gray-300 transition-colors">Privacy</Link>
-            <Link href="#" className="hover:text-gray-300 transition-colors">Terms</Link>
+          <span className="text-gray-400 text-sm">© 2026 DocuMind. All rights reserved.</span>
+          <div className="flex items-center gap-6 text-sm text-gray-400">
+            <Link href="#" className="hover:text-gray-200 transition-colors">Privacy</Link>
+            <Link href="#" className="hover:text-gray-200 transition-colors">Terms</Link>
           </div>
         </div>
       </footer>

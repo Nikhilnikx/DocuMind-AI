@@ -1,7 +1,6 @@
 "use client";
 
 import { Sidebar } from "@/components/sidebar";
-import { useAppStore } from "@/lib/store";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -9,9 +8,11 @@ interface DashboardLayoutProps {
   chatCount?: number;
 }
 
+/**
+ * @deprecated Use DashboardShell instead. This component is kept for
+ * backward compatibility but should not be used in new code.
+ */
 export function DashboardLayout({ children, user, chatCount }: DashboardLayoutProps) {
-  const { sidebarOpen } = useAppStore();
-
   return (
     <div className="flex h-screen bg-[#0a0c16] overflow-hidden">
       <Sidebar user={user} chatCount={chatCount} />

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { ErrorBoundary } from "@/components/error-boundary";
 
 export const metadata: Metadata = {
   title: "DocuMind – The Thinking Workspace for Your Documents",
@@ -17,7 +18,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className="bg-[#0a0c16] text-white antialiased">{children}</body>
+      <body className="bg-[#0a0c16] text-white antialiased">
+        <a href="#main-content" className="skip-to-content">
+          Skip to content
+        </a>
+        <ErrorBoundary>{children}</ErrorBoundary>
+      </body>
     </html>
   );
 }
